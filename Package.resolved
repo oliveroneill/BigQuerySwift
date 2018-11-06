@@ -1,0 +1,34 @@
+{
+  "object": {
+    "pins": [
+      {
+        "package": "CircuitBreaker",
+        "repositoryURL": "https://github.com/IBM-Swift/CircuitBreaker.git",
+        "state": {
+          "branch": null,
+          "revision": "81581e3fb094ab4879aa2c5ce54201f1dbce0a7f",
+          "version": "5.0.1"
+        }
+      },
+      {
+        "package": "LoggerAPI",
+        "repositoryURL": "https://github.com/IBM-Swift/LoggerAPI.git",
+        "state": {
+          "branch": null,
+          "revision": "5041f2673aa75d6e973d9b6bd3956bc5068387c8",
+          "version": "1.7.3"
+        }
+      },
+      {
+        "package": "SwiftyRequest",
+        "repositoryURL": "https://github.com/IBM-Swift/SwiftyRequest.git",
+        "state": {
+          "branch": null,
+          "revision": "617de05a8bea00acf0c1fd68fd8c42aa7a42c036",
+          "version": "1.1.3"
+        }
+      }
+    ]
+  },
+  "version": 1
+}
