@@ -84,9 +84,6 @@ final class BigQuerySwiftTests: XCTestCase {
     func testInsertSetsUpRequestCorrectly() {
         let httpClient = MockClient(response: (nil, nil, TestError.test))
         let expectedUrl = "https://www.googleapis.com/bigquery/v2/projects/id-1234/datasets/dataset_name/tables/table_name/insertAll"
-        let expectedPayload = """
-        {"skipInvalidRows":false,"ignoreUnknownValues":false,"kind":"bigquery#tableDataInsertAllRequest","rows":[{"json":{"testVal":"another","testInt":1,"testArray":["x","y"],"testName":"name"}},{"json":{"testVal":"val","testInt":53,"testArray":["z","the"],"testName":"two"}}]}
-        """.data(using: .utf8)!
         let expectedHeaders = ["Authorization": "Bearer " + authenticationToken]
         let client = BigQueryClient<TestRow>(
             authenticationToken: authenticationToken,
@@ -98,7 +95,8 @@ final class BigQuerySwiftTests: XCTestCase {
         try! client.insert(rows: rows) { _ in
             XCTAssertEqual(1, httpClient.calls.count)
             XCTAssertEqual(expectedUrl, httpClient.calls[0].url)
-            XCTAssertEqual(expectedPayload, httpClient.calls[0].payload)
+            // TODO: figure out how to test payload since JSON encoding does
+            // not deterministically set order
             XCTAssertEqual(expectedHeaders, httpClient.calls[0].headers)
         }
     }
