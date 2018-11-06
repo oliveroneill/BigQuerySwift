@@ -1,5 +1,11 @@
 # BigQuerySwift
 
+[![Build Status](https://travis-ci.org/oliveroneill/BigQuerySwift.svg?branch=master)](https://travis-ci.org/oliveroneill/BigQuerySwift)
+[![Platform](https://img.shields.io/badge/Swift-4.2-orange.svg)](https://img.shields.io/badge/Swift-4.2-orange.svg)
+[![Swift Package Manager](https://img.shields.io/badge/spm-compatible-brightgreen.svg?style=flat)](https://swift.org/package-manager)
+![macOS](https://img.shields.io/badge/os-macOS-green.svg?style=flat)
+![Linux](https://img.shields.io/badge/os-linux-green.svg?style=flat)
+
 A [BigQuery](https://cloud.google.com/bigquery/) client for Swift.
 
 ## Usage
