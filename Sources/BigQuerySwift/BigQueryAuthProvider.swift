@@ -6,13 +6,13 @@ import OAuth2
 ///
 /// - token: Successful response will contain the authentication token
 /// - error: Unsuccessful response will contain the error
-enum AuthResponse {
+public enum AuthResponse {
     case token(String)
     case error(Error)
 }
 
 /// Handles authenticating a service account
-struct BigQueryAuthProvider {
+public struct BigQueryAuthProvider {
     /// Set scope to be BigQuery
     private let scopes = [
         "https://www.googleapis.com/auth/bigquery",
@@ -25,7 +25,7 @@ struct BigQueryAuthProvider {
     ///
     /// - Parameter completionHandler: Called upon completion
     /// - Throws: If JWT creation fails
-    func getAuthenticationToken(completionHandler: @escaping (AuthResponse) -> Void) throws {
+    public func getAuthenticationToken(completionHandler: @escaping (AuthResponse) -> Void) throws {
         // Get current directory
         let currentDirectoryURL = URL(
             fileURLWithPath: FileManager.default.currentDirectoryPath
