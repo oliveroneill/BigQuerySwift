@@ -19,6 +19,8 @@ public struct BigQueryAuthProvider {
         "https://www.googleapis.com/auth/bigquery.insertdata",
     ]
 
+    public init() {}
+
     /// Get an authentication token to be used in API calls.
     /// The credentials file is expected to be in the same directory as the
     /// running binary (ie. $pwd/credentials.json)
