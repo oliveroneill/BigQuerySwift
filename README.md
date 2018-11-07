@@ -22,6 +22,9 @@ try! provider.getAuthenticationToken { response in
     }
 }
 ```
+You'll need to copy your credentials file at `$GOOGLE_APPLICATION_CREDENTIALS`
+to `credentials.json` in the directory that the binary is run in.
+
 To insert:
 ```swift
 let client = BigQueryClient<YourEncodableType>(
