@@ -2,6 +2,24 @@
   "object": {
     "pins": [
       {
+        "package": "Auth",
+        "repositoryURL": "https://github.com/saga-dash/auth-library-swift.git",
+        "state": {
+          "branch": "master",
+          "revision": "26afd1ad24463fa22168ae9e6c25df3bd9b42884",
+          "version": null
+        }
+      },
+      {
+        "package": "BigInt",
+        "repositoryURL": "https://github.com/attaswift/BigInt",
+        "state": {
+          "branch": null,
+          "revision": "018a5925f60f9e0523edd261de394a0898fe95b7",
+          "version": "3.1.0"
+        }
+      },
+      {
         "package": "CircuitBreaker",
         "repositoryURL": "https://github.com/IBM-Swift/CircuitBreaker.git",
         "state": {
@@ -11,12 +29,39 @@
         }
       },
       {
+        "package": "CryptoSwift",
+        "repositoryURL": "https://github.com/krzyzanowskim/CryptoSwift.git",
+        "state": {
+          "branch": null,
+          "revision": "874280173e082cdd7ac6602be235914efe3f4dbc",
+          "version": "0.13.0"
+        }
+      },
+      {
         "package": "LoggerAPI",
         "repositoryURL": "https://github.com/IBM-Swift/LoggerAPI.git",
         "state": {
           "branch": null,
           "revision": "5041f2673aa75d6e973d9b6bd3956bc5068387c8",
           "version": "1.7.3"
+        }
+      },
+      {
+        "package": "SipHash",
+        "repositoryURL": "https://github.com/attaswift/SipHash",
+        "state": {
+          "branch": null,
+          "revision": "e325083424688055363bbfcb7f1a440d7d7a1bae",
+          "version": "1.2.2"
+        }
+      },
+      {
+        "package": "SwiftyBase64",
+        "repositoryURL": "https://github.com/timburks/SwiftyBase64",
+        "state": {
+          "branch": null,
+          "revision": "01f2f5c4886d0b8d7cb8c0e96b2aefccd1c7ccd8",
+          "version": "1.2.0"
         }
       },
       {

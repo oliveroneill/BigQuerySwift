@@ -9,6 +9,20 @@
 A [BigQuery](https://cloud.google.com/bigquery/) client for Swift.
 
 ## Usage
+To get an authentication from your service account:
+```swift
+let provider = BigQueryAuthProvider()
+try! provider.getAuthenticationToken { response in
+    switch response {
+    case .token(let token):
+        // Your token to be passed into BigQueryClient
+        print(token)
+    case .error(_):
+        fatalError("Something went wrong.")
+    }
+}
+```
+To insert:
 ```swift
 let client = BigQueryClient<YourEncodableType>(
     authenticationToken: "<ENTER-AUTHENTICATION-TOKEN>",
@@ -25,6 +39,7 @@ try! client.insert(rows: rows) { response in
     }
 }
 ```
+I'll simplify this into a single step soon.
 
 ## Contributing
 Feel free to help out. Currently only

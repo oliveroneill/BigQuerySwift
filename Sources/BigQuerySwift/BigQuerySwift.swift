@@ -37,7 +37,7 @@ public struct InsertError: Decodable, Equatable {
 
 /// BigQuery response
 public struct InsertHTTPResponse: Decodable, Equatable {
-    let insertErrors: [InsertError]
+    let insertErrors: [InsertError]?
 }
 
 /// Enum from insert call
