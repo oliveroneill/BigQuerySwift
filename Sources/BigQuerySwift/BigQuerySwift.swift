@@ -23,21 +23,21 @@ private struct InsertPayload<T: Encodable>: Encodable {
 
 /// An error in the response from BigQuery
 public struct BigQueryError: Decodable, Equatable {
-    let reason: String
-    let location: String
-    let debugInfo: String
-    let message: String
+    public let reason: String
+    public let location: String
+    public let debugInfo: String
+    public let message: String
 }
 
 /// Insert error from response
 public struct InsertError: Decodable, Equatable {
-    let index: Int
-    let errors: [BigQueryError]
+    public let index: Int
+    public let errors: [BigQueryError]
 }
 
 /// BigQuery response
 public struct InsertHTTPResponse: Decodable, Equatable {
-    let insertErrors: [InsertError]?
+    public let insertErrors: [InsertError]?
 }
 
 /// Enum from insert call
