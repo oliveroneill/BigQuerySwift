@@ -2,7 +2,7 @@ import XCTest
 @testable import BigQuerySwift
 
 final class BigQuerySwiftTests: XCTestCase {
-    private struct TestRow: Encodable {
+    private struct TestRow: Codable, Equatable {
         let testName: String
         let testVal: String
         let testArray: [String]
@@ -73,8 +73,8 @@ final class BigQuerySwiftTests: XCTestCase {
             client: MockClient(response: (data, nil, nil))
         )
         try! client.insert(rows: rows) { response in
-            guard case let .bigQueryResponse(r) = response else {
-                print("Unexpected error")
+            guard case let .insertResponse(r) = response else {
+                XCTFail("Unexpected error")
                 return
             }
             XCTAssertEqual(expected, r)
@@ -112,7 +112,187 @@ final class BigQuerySwiftTests: XCTestCase {
         )
         try! client.insert(rows: rows) { response in
             guard case let .error(e) = response else {
-                print("Unexpected success")
+                XCTFail("Unexpected error")
+                return
+            }
+            XCTAssertEqual(expected, e as! BigQuerySwiftTests.TestError)
+        }
+    }
+
+    /// BigQuery returns all values as strings. You can decode to specific types
+    /// as needed but for these tests we just use strings for simplicity
+    private struct RowOfStrings: Codable, Equatable {
+        let testName: String
+        let testVal: String
+        let testArray: [String]
+    }
+
+    func testQuery() {
+        let query = "SELECT * FROM table_name WHERE bla"
+        let data = """
+        {
+         "kind": "bigquery#queryResponse",
+         "schema": {
+          "fields": [
+           {
+            "name": "testName",
+            "type": "STRING",
+            "mode": "REQUIRED"
+           },
+           {
+            "name": "testVal",
+            "type": "STRING",
+            "mode": "NULLABLE"
+           },
+           {
+            "name": "testArray",
+            "type": "STRING",
+            "mode": "REPEATED"
+           }
+          ]
+         },
+         "jobReference": {
+          "projectId": "projectId123",
+          "jobId": "dsjfsdkjfs",
+         },
+         "totalRows": "12",
+         "rows": [
+          {
+            "f": [
+              {
+                "v": "a name"
+              },
+              {
+                "v": "val"
+              },
+              {
+                "v": [
+                  {
+                    "v": "test"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "f": [
+              {
+                "v": "another name..."
+              },
+              {
+                "v": "x"
+              },
+              {
+                "v": [
+                  {
+                    "v": "xyz"
+                  },
+                  {
+                    "v": "x"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "f": [
+              {
+                "v": "name1"
+              },
+              {
+                "v": "y"
+              },
+              {
+                "v": []
+              }
+            ]
+          }
+         ],
+         "totalBytesProcessed": "120",
+          "errors": [
+            {
+              "reason": "bla",
+              "location": "line 1",
+              "debugInfo": "test",
+              "message": "a message"
+            }
+          ]
+        }
+        """.data(using: .utf8)
+        let rows = [
+            RowOfStrings(testName: "a name", testVal: "val", testArray: ["test"]),
+            RowOfStrings(testName: "another name...", testVal: "x", testArray: ["xyz", "x"]),
+            RowOfStrings(testName: "name1", testVal: "y", testArray: [])
+        ]
+        let errors = [
+            BigQueryError(
+                reason: "bla",
+                location: "line 1",
+                debugInfo: "test",
+                message: "a message"
+            )
+        ]
+        let expected = QueryResponse(
+            rows: rows,
+            errors: errors,
+            pageToken: nil,
+            totalBytesProcessed: "120"
+        )
+        let client = BigQueryClient<TestRow>(
+            authenticationToken: authenticationToken,
+            projectID: projectID,
+            datasetID: datasetID,
+            tableName: tableName,
+            client: MockClient(response: (data, nil, nil))
+        )
+        try! client.query(query) { (response: QueryCallResponse<RowOfStrings>) in
+            guard case let .queryResponse(r) = response else {
+                XCTFail("Unexpected error \(response)")
+                return
+            }
+            XCTAssertEqual(expected, r)
+        }
+    }
+
+    func testQueryWithInvalidJSON() {
+        let query = "SELECT * FROM table_name WHERE bla"
+        let data = """
+        {
+          "kind": "bigquery#tableDataInsertAllResponse",
+          "some_other_thing": []
+        }
+        """.data(using: .utf8)
+        let client = BigQueryClient<TestRow>(
+            authenticationToken: authenticationToken,
+            projectID: projectID,
+            datasetID: datasetID,
+            tableName: tableName,
+            client: MockClient(response: (data, nil, nil))
+        )
+        try! client.query(query) { (response: QueryCallResponse<TestRow>) in
+            guard case let .error(e) = response else {
+                XCTFail("Unexpected success")
+                return
+            }
+            guard case .keyNotFound(_)? = e as? DecodingError else {
+                XCTFail("Unexpected error \(e)")
+                return
+            }
+        }
+    }
+
+    func testQueryError() {
+        let expected = TestError.test
+        let client = BigQueryClient<TestRow>(
+            authenticationToken: authenticationToken,
+            projectID: projectID,
+            datasetID: datasetID,
+            tableName: tableName,
+            client: MockClient(response: (nil, nil, expected))
+        )
+        try! client.query("") { (response: QueryCallResponse<RowOfStrings>) in
+            guard case let .error(e) = response else {
+                XCTFail("Unexpected error")
                 return
             }
             XCTAssertEqual(expected, e as! BigQuerySwiftTests.TestError)
