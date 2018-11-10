@@ -149,19 +149,21 @@ public struct QueryHTTPResponse: Decodable {
 
 /// A simplified response to be returned via BigQuerySwift's query function
 public struct QueryResponse<T: Decodable & Equatable>: Decodable, Equatable {
-    let rows: [T]?
-    let pageToken: String?
-    let totalBytesProcessed: String
-    let errors: [BigQueryError]?
+    public let rows: [T]?
+    public let pageToken: String?
+    public let totalBytesProcessed: String
+    public let errors: [BigQueryError]?
 
-    init(rows: [T]?, errors: [BigQueryError]?, pageToken: String?, totalBytesProcessed: String) {
+    init(rows: [T]?, errors: [BigQueryError]?, pageToken: String?,
+         totalBytesProcessed: String) {
         self.rows = rows
         self.pageToken = pageToken
         self.totalBytesProcessed = totalBytesProcessed
         self.errors = errors
     }
 
-    init(dict: [[String:Any]], errors: [BigQueryError]?, pageToken: String?, totalBytesProcessed: String) throws {
+    init(dict: [[String:Any]], errors: [BigQueryError]?, pageToken: String?,
+         totalBytesProcessed: String) throws {
         let jsonData = try JSONSerialization.data(withJSONObject: dict)
         let decoder = JSONDecoder()
         self.rows = try decoder.decode(
@@ -173,7 +175,8 @@ public struct QueryResponse<T: Decodable & Equatable>: Decodable, Equatable {
         self.errors = errors
     }
 
-    init(errors: [BigQueryError]?, pageToken: String?, totalBytesProcessed: String) throws {
+    init(errors: [BigQueryError]?, pageToken: String?,
+         totalBytesProcessed: String) throws {
         self.errors = errors
         self.pageToken = pageToken
         self.totalBytesProcessed = totalBytesProcessed
