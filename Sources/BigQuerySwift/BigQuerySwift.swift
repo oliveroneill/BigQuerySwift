@@ -88,14 +88,19 @@ public struct ValueList: Decodable {
 /// - nonRepeating: A single value for non-repeating value
 /// - missingValue: An error if it wasn't either repeating or non-repeating
 public enum NestedValue: Decodable {
-    case repeating(ValueList), nonRepeating(Value)
+    case repeating([Value]), nonRepeating(String?)
+
+    enum CodingKeys: String, CodingKey {
+        case v
+    }
 
     public init(from decoder: Decoder) throws {
-        if let list = try? decoder.singleValueContainer().decode(ValueList.self) {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        if let list = try? container.decode([Value].self, forKey: .v) {
             self = .repeating(list)
             return
         }
-        if let value = try? decoder.singleValueContainer().decode(Value.self) {
+        if let value = try? container.decode(String?.self, forKey: .v) {
             self = .nonRepeating(value)
             return
         }
@@ -136,9 +141,9 @@ public struct QueryHTTPResponse: Decodable {
             for i in 0..<row.f.count {
                 switch row.f[i] {
                 case .repeating(let values):
-                    rowDict[schema.fields[i].name] = values.v.map { $0.v }
+                    rowDict[schema.fields[i].name] = values.map { $0.v }
                 case .nonRepeating(let value):
-                    rowDict[schema.fields[i].name] = value.v
+                    rowDict[schema.fields[i].name] = value
                 }
             }
             rtn.append(rowDict)
