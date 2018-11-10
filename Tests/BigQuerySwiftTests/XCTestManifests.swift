@@ -5,6 +5,9 @@ extension BigQuerySwiftTests {
         ("testInsert", testInsert),
         ("testInsertError", testInsertError),
         ("testInsertSetsUpRequestCorrectly", testInsertSetsUpRequestCorrectly),
+        ("testQuery", testQuery),
+        ("testQueryError", testQueryError),
+        ("testQueryWithInvalidJSON", testQueryWithInvalidJSON),
     ]
 }
 
