@@ -123,7 +123,7 @@ public struct QueryHTTPResponse: Decodable {
     let schema: BigQuerySchema?
     let rows: [BigQueryRow]?
     let pageToken: String?
-    let totalBytesProcessed: String
+    let totalBytesProcessed: String?
     let errors: [BigQueryError]?
 
     /// Convert query response from schema and rows into a single dictionary
@@ -156,11 +156,11 @@ public struct QueryHTTPResponse: Decodable {
 public struct QueryResponse<T: Decodable & Equatable>: Decodable, Equatable {
     public let rows: [T]?
     public let pageToken: String?
-    public let totalBytesProcessed: String
+    public let totalBytesProcessed: String?
     public let errors: [BigQueryError]?
 
     init(rows: [T]?, errors: [BigQueryError]?, pageToken: String?,
-         totalBytesProcessed: String) {
+         totalBytesProcessed: String?) {
         self.rows = rows
         self.pageToken = pageToken
         self.totalBytesProcessed = totalBytesProcessed
@@ -168,7 +168,7 @@ public struct QueryResponse<T: Decodable & Equatable>: Decodable, Equatable {
     }
 
     init(dict: [[String:Any]], errors: [BigQueryError]?, pageToken: String?,
-         totalBytesProcessed: String) throws {
+         totalBytesProcessed: String?) throws {
         let jsonData = try JSONSerialization.data(withJSONObject: dict)
         let decoder = JSONDecoder()
         self.rows = try decoder.decode(
@@ -181,7 +181,7 @@ public struct QueryResponse<T: Decodable & Equatable>: Decodable, Equatable {
     }
 
     init(errors: [BigQueryError]?, pageToken: String?,
-         totalBytesProcessed: String) throws {
+         totalBytesProcessed: String?) throws {
         self.errors = errors
         self.pageToken = pageToken
         self.totalBytesProcessed = totalBytesProcessed
