@@ -199,7 +199,8 @@ public enum QueryCallResponse<T : Decodable & Equatable> {
 }
 
 public struct BigQueryClient<T : Encodable> {
-    private let url: String
+    private let insertUrl: String
+    private let queryUrl: String
     private let authenticationToken: String
     private let client: HTTPClient
 
@@ -207,7 +208,8 @@ public struct BigQueryClient<T : Encodable> {
          tableName: String, client: HTTPClient) {
         self.authenticationToken = authenticationToken
         self.client = client
-        self.url = "https://www.googleapis.com/bigquery/v2/projects/" + projectID + "/datasets/" + datasetID + "/tables/" + tableName + "/insertAll"
+        self.insertUrl = "https://www.googleapis.com/bigquery/v2/projects/" + projectID + "/datasets/" + datasetID + "/tables/" + tableName + "/insertAll"
+        self.queryUrl = "https://www.googleapis.com/bigquery/v2/projects/" + projectID + "/queries"
     }
 
     public init(authenticationToken: String, projectID: String,
@@ -222,7 +224,7 @@ public struct BigQueryClient<T : Encodable> {
     public func insert(rows: [T], completionHandler: @escaping (InsertResponse) -> Void) throws {
         let data = try JSONEncoder().encode(InsertPayload(rows: rows))
         client.post(
-            url: url,
+            url: insertUrl,
             payload: data,
             headers: ["Authorization": "Bearer " + authenticationToken]
         ) { (body, response, error) in
@@ -249,7 +251,7 @@ public struct BigQueryClient<T : Encodable> {
     public func query<V:Decodable & Equatable>(_ query: String, completionHandler: @escaping (QueryCallResponse<V>) -> Void) throws {
         let data = try JSONEncoder().encode(QueryPayload(query: query))
         client.post(
-            url: url,
+            url: queryUrl,
             payload: data,
             headers: ["Authorization": "Bearer " + authenticationToken]
         ) { (body, response, error) in
