@@ -1,6 +1,15 @@
 import XCTest
 @testable import BigQuerySwift
 
+/// Implement Equatable for testing purposes
+extension QueryResponse: Equatable where T: Equatable {
+    public static func == (lhs: QueryResponse<T>, rhs: QueryResponse<T>) -> Bool {
+        return lhs.rows == rhs.rows && lhs.pageToken == rhs.pageToken &&
+            lhs.totalBytesProcessed == rhs.totalBytesProcessed &&
+            lhs.errors == rhs.errors
+    }
+}
+
 final class BigQuerySwiftTests: XCTestCase {
     private struct TestRow: Codable, Equatable {
         let testName: String

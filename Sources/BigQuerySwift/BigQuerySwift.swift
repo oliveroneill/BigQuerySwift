@@ -153,7 +153,7 @@ public struct QueryHTTPResponse: Decodable {
 }
 
 /// A simplified response to be returned via BigQuerySwift's query function
-public struct QueryResponse<T: Decodable & Equatable>: Decodable, Equatable {
+public struct QueryResponse<T: Decodable>: Decodable {
     public let rows: [T]?
     public let pageToken: String?
     public let totalBytesProcessed: String
@@ -193,7 +193,7 @@ public struct QueryResponse<T: Decodable & Equatable>: Decodable, Equatable {
 ///
 /// - error: An error with network or decoding JSON
 /// - queryResponse: Response from BigQuery
-public enum QueryCallResponse<T : Decodable & Equatable> {
+public enum QueryCallResponse<T : Decodable> {
     case error(Error)
     case queryResponse(QueryResponse<T>)
 }
@@ -248,7 +248,7 @@ public struct BigQueryClient<T : Encodable> {
         }
     }
 
-    public func query<V:Decodable & Equatable>(_ query: String, completionHandler: @escaping (QueryCallResponse<V>) -> Void) throws {
+    public func query<V:Decodable>(_ query: String, completionHandler: @escaping (QueryCallResponse<V>) -> Void) throws {
         let data = try JSONEncoder().encode(QueryPayload(query: query))
         client.post(
             url: queryUrl,
