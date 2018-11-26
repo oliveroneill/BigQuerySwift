@@ -40,7 +40,7 @@ let client = BigQueryClient<YourEncodableType>(
     datasetID: "<ENTER-DATASET-ID>",
     tableName: "<ENTER-TABLE-NAME>"
 )
-try! client.insert(rows: rows) { response in
+try client.insert(rows: rows) { response in
     switch response {
     case .error(let error):
         fatalError("Error: " + error.localizedDescription)
@@ -49,7 +49,26 @@ try! client.insert(rows: rows) { response in
     }
 }
 ```
-I'll simplify this into a single step soon.
+
+To query:
+```swift
+let query = "SELECT * FROM users"
+try db.query(query) {
+    switch $0 {
+    case .error(let e):
+        fatalError("Something went wrong.")
+    case .queryResponse(let result):
+        guard let result = result.rows else {
+            guard let errors = result.errors else {
+                fatalError("No errors and no rows.")
+            }
+            print("BigQuery errors: \(errors)")
+            return
+        }
+        printQueryResult(result)
+    }
+}
+```
 
 ## Contributing
 Feel free to help out. Currently only
