@@ -8,6 +8,13 @@
 
 A [BigQuery](https://cloud.google.com/bigquery/) client for Swift.
 
+## Installation
+Add this to your Package.swift:
+
+```swift
+.package(url: "https://github.com/oliveroneill/BigQuerySwift.git", .upToNextMajor(from: "0.0.1")),
+```
+
 ## Usage
 To get an authentication from your service account:
 ```swift
