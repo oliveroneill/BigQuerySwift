@@ -53,8 +53,8 @@ try client.insert(rows: rows) { response in
 To query:
 ```swift
 let query = "SELECT * FROM users"
-try db.query(query) {
-    switch $0 {
+try db.query(query) { (r: QueryCallResponse<YourDecodableType>) in
+    switch r {
     case .error(let e):
         fatalError("Something went wrong.")
     case .queryResponse(let result):
