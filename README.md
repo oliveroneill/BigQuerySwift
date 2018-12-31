@@ -70,6 +70,9 @@ try db.query(query) { (r: QueryCallResponse<YourDecodableType>) in
 }
 ```
 
+## Examples
+For a working example, see [here](https://github.com/oliveroneill/WiltCollector/blob/bigquery-switch/Sources/WiltCollectorCore/BigQuery.swift).
+
 ## Contributing
 Feel free to help out. Currently only
 [insertAll](https://cloud.google.com/bigquery/docs/reference/rest/v2/tabledata/insertAll)
