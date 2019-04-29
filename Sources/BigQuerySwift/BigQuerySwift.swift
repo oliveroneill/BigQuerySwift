@@ -52,15 +52,6 @@ public struct InsertHTTPResponse: Decodable, Equatable {
     public let insertErrors: [InsertError]?
 }
 
-/// Enum from insert call
-///
-/// - error: An error with network or decoding JSON
-/// - insertResponse: Response from BigQuery
-public enum InsertResponse {
-    case error(Error)
-    case insertResponse(InsertHTTPResponse)
-}
-
 /// Schema value definition
 public struct SchemaValue: Decodable {
     let name: String
@@ -221,7 +212,8 @@ public struct BigQueryClient<T : Encodable> {
         )
     }
 
-    public func insert(rows: [T], completionHandler: @escaping (InsertResponse) -> Void) throws {
+    public func insert(rows: [T],
+                       completionHandler: @escaping (Result<InsertHTTPResponse, Error>) -> Void) throws {
         let data = try JSONEncoder().encode(InsertPayload(rows: rows))
         client.post(
             url: insertUrl,
@@ -229,7 +221,7 @@ public struct BigQueryClient<T : Encodable> {
             headers: ["Authorization": "Bearer " + authenticationToken]
         ) { (body, response, error) in
             if let error = error {
-                completionHandler(.error(error))
+                completionHandler(.failure(error))
                 return
             }
             guard let body = body else {
@@ -241,9 +233,9 @@ public struct BigQueryClient<T : Encodable> {
                     InsertHTTPResponse.self,
                     from: body
                 )
-                completionHandler(.insertResponse(response))
+                completionHandler(.success(response))
             } catch {
-                completionHandler(.error(error))
+                completionHandler(.failure(error))
             }
         }
     }

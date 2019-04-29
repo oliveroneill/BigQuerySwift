@@ -82,7 +82,7 @@ final class BigQuerySwiftTests: XCTestCase {
             client: MockClient(response: (data, nil, nil))
         )
         try! client.insert(rows: rows) { response in
-            guard case let .insertResponse(r) = response else {
+            guard case let .success(r) = response else {
                 XCTFail("Unexpected error")
                 return
             }
@@ -120,7 +120,7 @@ final class BigQuerySwiftTests: XCTestCase {
             client: MockClient(response: (nil, nil, expected))
         )
         try! client.insert(rows: rows) { response in
-            guard case let .error(e) = response else {
+            guard case let .failure(e) = response else {
                 XCTFail("Unexpected error")
                 return
             }
